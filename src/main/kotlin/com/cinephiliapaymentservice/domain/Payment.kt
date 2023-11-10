@@ -1,29 +1,32 @@
 package com.cinephiliapaymentservice.domain
 
 import com.cinephiliapaymentservice.domain.enums.PaymentStatus
+import ru.quipy.core.annotations.AggregateType
+import ru.quipy.domain.Aggregate
+import ru.quipy.domain.AggregateState
 import java.time.Instant
 import java.util.*
 
-data class Payment(
-    val user: User,
-    val movie: Movie,
-) {
-    var closedAt: Instant? = null
-    var status: PaymentStatus = PaymentStatus.New
-    val createdAt: Instant = Instant.now()
-    val id: UUID = UUID.randomUUID()
+@AggregateType(aggregateEventsTableName = "payments")
+class PaymentAggregate : Aggregate
 
-    fun finish() {
-        check(status == PaymentStatus.New) {"Only payments at New status can be finished"}
+class PaymentAggregateState : AggregateState<UUID, PaymentAggregate> {
+    private var paymentId: UUID = UUID.randomUUID()
+    private val createdAt: Instant = Instant.now()
+    private var closedAt: Instant? = null
+    private var status: PaymentStatus = PaymentStatus.New
 
-        status = PaymentStatus.Finished
-        closedAt = Instant.now()
-    }
+    private var user: User? = null
+    private var movie: Movie? = null
 
-    fun cancel() {
-        check(status == PaymentStatus.New) {"Only payments at New status can be canceled"}
-
-        status = PaymentStatus.Canceled
-        closedAt = Instant.now()
-    }
+    override fun getId() = paymentId
 }
+
+data class Movie(
+    var id: UUID,
+    var price: Double
+)
+
+data class User(
+    val id: UUID
+)
