@@ -22,11 +22,3 @@ class PaymentAggregateState : AggregateState<UUID, PaymentAggregate> {
     override fun getId() = paymentId
 }
 
-data class Movie(
-    var id: UUID,
-    var price: Double
-)
-
-data class User(
-    val id: UUID
-)
