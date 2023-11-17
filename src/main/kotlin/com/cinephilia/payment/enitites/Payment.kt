@@ -2,11 +2,11 @@ package com.cinephilia.payment.enitites
 
 import com.cinephilia.payment.enitites.enums.PaymentStatus
 import com.cinephilia.payment.events.PaymentCreatedEvent
+import com.cinephilia.payment.events.PaymentFailedEvent
 import ru.quipy.core.annotations.AggregateType
 import ru.quipy.core.annotations.StateTransitionFunc
 import ru.quipy.domain.Aggregate
 import ru.quipy.domain.AggregateState
-import java.time.Instant
 import java.util.*
 
 @AggregateType(aggregateEventsTableName = "payments")
@@ -29,6 +29,12 @@ class PaymentAggregateState : AggregateState<UUID, PaymentAggregate> {
         createdAt = event.createdAt
         user = event.user
         movie = event.movie
+    }
+
+    @StateTransitionFunc
+    fun applyPaymentFailed(event: PaymentFailedEvent) {
+        closedAt = event.createdAt
+        status = PaymentStatus.Canceled
     }
 }
 
