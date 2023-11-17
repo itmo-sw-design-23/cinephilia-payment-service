@@ -1,4 +1,4 @@
-package com.cinephiliapaymentservice
+package com.cinephilia.payment
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
