@@ -11,13 +11,13 @@ import java.util.*
 class PaymentAggregate : Aggregate
 
 class PaymentAggregateState : AggregateState<UUID, PaymentAggregate> {
-    private var paymentId: UUID = UUID.randomUUID()
+    private val paymentId: UUID = UUID.randomUUID()
     private val createdAt: Instant = Instant.now()
-    private var closedAt: Instant? = null
+    private lateinit var closedAt: Instant
     private var status: PaymentStatus = PaymentStatus.New
 
-    private var user: User? = null
-    private var movie: Movie? = null
+    private lateinit var user: User
+    private lateinit var movie: Movie
 
     override fun getId() = paymentId
 }
