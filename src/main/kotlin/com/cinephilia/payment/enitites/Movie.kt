@@ -1,4 +1,4 @@
-package com.cinephilia.payment.domain
+package com.cinephilia.payment.enitites
 
 import java.util.*
 

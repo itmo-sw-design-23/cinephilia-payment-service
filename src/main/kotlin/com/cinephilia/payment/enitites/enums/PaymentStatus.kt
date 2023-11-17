@@ -1,4 +1,4 @@
-package com.cinephilia.payment.domain.enums
+package com.cinephilia.payment.enitites.enums
 
 enum class PaymentStatus {
     New,

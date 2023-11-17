@@ -1,6 +1,6 @@
-package com.cinephilia.payment.domain
+package com.cinephilia.payment.enitites
 
-import com.cinephilia.payment.domain.enums.PaymentStatus
+import com.cinephilia.payment.enitites.enums.PaymentStatus
 import ru.quipy.core.annotations.AggregateType
 import ru.quipy.domain.Aggregate
 import ru.quipy.domain.AggregateState
