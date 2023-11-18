@@ -14,6 +14,7 @@ class PaymentAggregate : Aggregate
 
 class PaymentAggregateState : AggregateState<UUID, PaymentAggregate> {
     private lateinit var paymentId: UUID
+    private lateinit var externalId: UUID
     private var createdAt: Long = System.currentTimeMillis()
     private var closedAt: Long? = null
     private var status: PaymentStatus = PaymentStatus.New
@@ -35,6 +36,13 @@ class PaymentAggregateState : AggregateState<UUID, PaymentAggregate> {
     fun applyPaymentFailed(event: PaymentFailedEvent) {
         closedAt = event.createdAt
         status = PaymentStatus.Canceled
+    }
+
+    @StateTransitionFunc
+    fun applyPaymentSucceded(event: PaymentSuccededEvent) {
+        closedAt = event.createdAt
+        externalId = event.externalId
+        status = PaymentStatus.Succeded
     }
 }
 

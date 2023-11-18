@@ -4,4 +4,5 @@ enum class PaymentStatus {
     New,
     Finished,
     Canceled,
+    Succeded
 }
