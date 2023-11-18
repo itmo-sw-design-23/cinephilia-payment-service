@@ -44,5 +44,11 @@ class PaymentAggregateState : AggregateState<UUID, PaymentAggregate> {
         externalId = event.externalId
         status = PaymentStatus.Succeded
     }
+
+    @StateTransitionFunc
+    fun applyPaymentCanceled(event: PaymentCanceledEvent) {
+        closedAt = event.createdAt
+        status = PaymentStatus.Canceled
+    }
 }
 
