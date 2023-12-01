@@ -26,6 +26,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("ru.quipy:tiny-event-sourcing-spring-boot-starter:2.2.2")
     implementation("ru.quipy:tiny-mongo-event-store-spring-boot-starter:2.1.1")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 }
 
 tasks.withType<KotlinCompile> {
