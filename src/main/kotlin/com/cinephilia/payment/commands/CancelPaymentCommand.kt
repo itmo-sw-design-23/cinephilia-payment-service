@@ -3,7 +3,8 @@ package com.cinephilia.payment.commands
 import com.cinephilia.payment.enitites.Movie
 import com.cinephilia.payment.enitites.PaymentAggregate
 import com.cinephilia.payment.enitites.User
-import com.cinephilia.payment.events.PaymentCreatedEvent
+import com.cinephilia.payment.events.PaymentCanceledEvent
+
 import java.util.*
 
 fun PaymentAggregate.cancelPaymentCommand(

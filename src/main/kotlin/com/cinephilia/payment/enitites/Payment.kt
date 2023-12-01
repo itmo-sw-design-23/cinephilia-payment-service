@@ -1,8 +1,10 @@
 package com.cinephilia.payment.enitites
 
 import com.cinephilia.payment.enitites.enums.PaymentStatus
+import com.cinephilia.payment.events.PaymentCanceledEvent
 import com.cinephilia.payment.events.PaymentCreatedEvent
 import com.cinephilia.payment.events.PaymentFailedEvent
+import com.cinephilia.payment.events.PaymentSuccededEvent
 import ru.quipy.core.annotations.AggregateType
 import ru.quipy.core.annotations.StateTransitionFunc
 import ru.quipy.domain.Aggregate
