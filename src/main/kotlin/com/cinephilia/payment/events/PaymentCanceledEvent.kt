@@ -1,8 +1,6 @@
 package com.cinephilia.payment.events
 
-import com.cinephilia.payment.enitites.Movie
 import com.cinephilia.payment.enitites.PaymentAggregate
-import com.cinephilia.payment.enitites.User
 import ru.quipy.core.annotations.DomainEvent
 import ru.quipy.domain.Event
 import java.util.*
