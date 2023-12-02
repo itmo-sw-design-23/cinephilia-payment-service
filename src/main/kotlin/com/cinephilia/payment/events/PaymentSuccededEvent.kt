@@ -10,9 +10,6 @@ import java.util.*
 @DomainEvent(name = PAYMENT_SUCCEDED_EVENT_TAG)
 class PaymentSuccededEvent(
     val paymentId: UUID,
-    val externalId: UUID,
-    val user: User,
-    val movie: Movie,
     val description: String,
     createdAt: Long = System.currentTimeMillis()
 ) : Event<PaymentAggregate>(

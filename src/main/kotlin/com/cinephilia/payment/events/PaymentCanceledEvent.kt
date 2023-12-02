@@ -10,8 +10,6 @@ import java.util.*
 @DomainEvent(name = PAYMENT_CANCELED_EVENT_TAG)
 class PaymentCanceledEvent(
     val paymentId: UUID,
-    val user: User,
-    val movie: Movie,
     createdAt: Long = System.currentTimeMillis()
 ) : Event<PaymentAggregate>(
     name = PAYMENT_CANCELED_EVENT_TAG,

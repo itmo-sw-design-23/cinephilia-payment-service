@@ -9,8 +9,6 @@ import java.util.*
 
 fun PaymentAggregateState.rejectPaymentCommand(
     paymentId: UUID,
-    user: User,
-    movie: Movie,
     description: String
 ): PaymentFailedEvent {
 
@@ -18,8 +16,6 @@ fun PaymentAggregateState.rejectPaymentCommand(
 
     return PaymentFailedEvent(
         paymentId = paymentId,
-        user = user,
-        movie = movie,
         description = description
     )
 }

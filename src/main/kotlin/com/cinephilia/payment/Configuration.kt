@@ -1,6 +1,5 @@
 package com.cinephilia.recommendation.domain.config
 
-import com.cinephilia.payment.PaymentController
 import com.cinephilia.payment.enitites.PaymentAggregate
 import com.cinephilia.payment.enitites.PaymentAggregateState
 import jakarta.annotation.PostConstruct

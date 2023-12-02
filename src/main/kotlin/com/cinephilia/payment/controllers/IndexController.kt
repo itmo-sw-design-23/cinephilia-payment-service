@@ -1,4 +1,4 @@
-package com.cinephilia.payment
+package ru.quipy.projections.com.cinephilia.payment.controllers
 
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.*

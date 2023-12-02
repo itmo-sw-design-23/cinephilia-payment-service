@@ -9,15 +9,9 @@ import com.cinephilia.payment.events.PaymentCanceledEvent
 import java.util.*
 
 fun PaymentAggregateState.cancelPaymentCommand(
-    paymentId: UUID = UUID.randomUUID(),
-    user: User,
-    movie: Movie,
+    paymentId: UUID,
 ): PaymentCanceledEvent {
     // TODO: business logic
 
-    return PaymentCanceledEvent(
-        paymentId = paymentId,
-        user = user,
-        movie = movie
-    )
+    return PaymentCanceledEvent(paymentId = paymentId)
 }
