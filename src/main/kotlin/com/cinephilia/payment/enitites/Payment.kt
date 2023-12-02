@@ -43,7 +43,6 @@ class PaymentAggregateState : AggregateState<UUID, PaymentAggregate> {
     @StateTransitionFunc
     fun applyPaymentSucceded(event: PaymentSuccededEvent) {
         closedAt = event.createdAt
-        externalId = event.externalId
         status = PaymentStatus.Succeded
     }
 

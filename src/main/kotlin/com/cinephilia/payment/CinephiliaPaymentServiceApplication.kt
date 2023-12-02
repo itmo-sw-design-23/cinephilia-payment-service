@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.info.Info
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.ComponentScan
+import ru.quipy.core.EventSourcingService
+import ru.quipy.projections.com.cinephilia.payment.controllers.PaymentController
 
 //@SpringBootApplication(scanBasePackages = ["ru.quipy"])
 //@OpenAPIDefinition(
@@ -18,5 +20,7 @@ import org.springframework.context.annotation.ComponentScan
 class CinephiliaPaymentServiceApplication
 
 fun main(args: Array<String>) {
+
+
     runApplication<CinephiliaPaymentServiceApplication>(*args)
 }
