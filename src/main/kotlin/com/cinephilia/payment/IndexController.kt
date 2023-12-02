@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/recommendations", consumes = ["application/json"])
+@RequestMapping("/")
 class IndexController {
     @GetMapping
     @Operation(summary = "Main page")
