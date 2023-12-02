@@ -2,11 +2,12 @@ package com.cinephilia.payment.commands
 
 import com.cinephilia.payment.enitites.Movie
 import com.cinephilia.payment.enitites.PaymentAggregate
+import com.cinephilia.payment.enitites.PaymentAggregateState
 import com.cinephilia.payment.enitites.User
 import com.cinephilia.payment.events.PaymentCreatedEvent
 import java.util.*
 
-fun PaymentAggregate.createPaymentCommand(
+fun PaymentAggregateState.createPaymentCommand(
     paymentId: UUID = UUID.randomUUID(),
     user: User,
     movie: Movie,

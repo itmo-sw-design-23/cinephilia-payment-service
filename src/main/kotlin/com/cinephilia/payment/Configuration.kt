@@ -1,8 +1,10 @@
 package com.cinephilia.recommendation.domain.config
 
+import com.cinephilia.payment.PaymentController
 import com.cinephilia.payment.enitites.PaymentAggregate
 import com.cinephilia.payment.enitites.PaymentAggregateState
 import jakarta.annotation.PostConstruct
+import lombok.RequiredArgsConstructor
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -14,8 +16,8 @@ import ru.quipy.streams.AggregateSubscriptionsManager
 import java.util.*
 
 @Configuration
+@RequiredArgsConstructor
 class Configuration {
-
     private val logger = LoggerFactory.getLogger(Configuration::class.java)
 
     @Autowired
@@ -31,7 +33,7 @@ class Configuration {
     private lateinit var eventStreamManager: AggregateEventStreamManager
 
     @Bean
-    fun recommendationEsService() =
+    fun paymentEsService() =
             eventSourcingServiceFactory.create<UUID, PaymentAggregate, PaymentAggregateState>()
 
     @PostConstruct

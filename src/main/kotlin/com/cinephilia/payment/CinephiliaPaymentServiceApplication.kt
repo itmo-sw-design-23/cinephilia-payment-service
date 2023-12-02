@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.info.Info
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.context.annotation.ComponentScan
 
 //@SpringBootApplication(scanBasePackages = ["ru.quipy"])
 //@OpenAPIDefinition(
@@ -13,7 +14,7 @@ import org.springframework.boot.runApplication
 //                description = "Payment API for Cinephilia's streaming service"
 //        )
 //)
-@SpringBootApplication()
+@SpringBootApplication(scanBasePackages = ["ru.quipy", "com.cinephilia.payment"])
 class CinephiliaPaymentServiceApplication
 
 fun main(args: Array<String>) {

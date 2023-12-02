@@ -27,6 +27,11 @@ dependencies {
     implementation("ru.quipy:tiny-event-sourcing-spring-boot-starter:2.2.2")
     implementation("ru.quipy:tiny-mongo-event-store-spring-boot-starter:2.1.1")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+
+    compileOnly ("org.projectlombok:lombok:1.18.30")
+    annotationProcessor ("org.projectlombok:lombok:1.18.30")
+    testCompileOnly ("org.projectlombok:lombok:1.18.30")
+    testAnnotationProcessor ("org.projectlombok:lombok:1.18.30")
 }
 
 tasks.withType<KotlinCompile> {
