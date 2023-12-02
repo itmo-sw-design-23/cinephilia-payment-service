@@ -7,6 +7,5 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/")
 class IndexController {
     @GetMapping
-    @Operation(summary = "Main page")
     fun index() = "Hello world!"
 }

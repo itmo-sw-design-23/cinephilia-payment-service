@@ -10,12 +10,8 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
-@RequestMapping("/recommendations", consumes = ["application/json"])
+@RequestMapping("/payments")
 class PaymentController {
-    @GetMapping
-    @Operation(summary = "Get recommendations by user ID")
-    fun index() = "Hello world!"
-
     @PostMapping
     fun createPayment() {
         val payment = PaymentAggregate()
