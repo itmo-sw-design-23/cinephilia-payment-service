@@ -24,6 +24,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("ru.quipy:tiny-event-sourcing-spring-boot-starter:2.2.2")
+    implementation("ru.quipy:tiny-mongo-event-store-spring-boot-starter:2.1.1")
 }
 
 tasks.withType<KotlinCompile> {
