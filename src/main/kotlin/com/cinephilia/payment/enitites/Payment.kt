@@ -15,14 +15,14 @@ import java.util.*
 class PaymentAggregate : Aggregate
 
 class PaymentAggregateState : AggregateState<UUID, PaymentAggregate> {
-    private lateinit var paymentId: UUID
+    lateinit var paymentId: UUID
     private lateinit var externalId: UUID
-    private var createdAt: Long = System.currentTimeMillis()
-    private var closedAt: Long? = null
-    private var status: PaymentStatus = PaymentStatus.New
+    var createdAt: Long = System.currentTimeMillis()
+    var closedAt: Long? = null
+    var status: PaymentStatus = PaymentStatus.New
 
-    private lateinit var user: User
-    private lateinit var movie: Movie
+    lateinit var user: User
+    lateinit var movie: Movie
 
     override fun getId() = paymentId
 
