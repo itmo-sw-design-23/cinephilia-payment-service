@@ -2,14 +2,16 @@ package com.cinephilia.payment.controllers
 
 import com.cinephilia.payment.commands.cancelPaymentCommand
 import com.cinephilia.payment.commands.createPaymentCommand
+import com.cinephilia.payment.commands.proceedPaymentCommand
 import com.cinephilia.payment.commands.rejectPaymentCommand
 import com.cinephilia.payment.dtos.CreatePaymentRequestDto
 import com.cinephilia.payment.dtos.CreatePaymentResponseDto
 import com.cinephilia.payment.dtos.RejectPaymentDto
 import com.cinephilia.payment.enitites.PaymentAggregate
 import com.cinephilia.payment.enitites.PaymentAggregateState
-import com.stripe.exception.SignatureVerificationException
 import com.stripe.model.Event
+import com.stripe.model.PaymentIntent
+import com.stripe.model.StripeObject
 import com.stripe.net.Webhook
 import org.springframework.web.bind.annotation.*
 import ru.quipy.core.EventSourcingService
@@ -56,14 +58,23 @@ class PaymentController(
         event = Webhook.constructEvent(
             payload, sigHeader, endpointSecret
         )
-        println(event.type)
-        if (event.type.equals("payment_intent.created")){
-            created = true
-        } else {
-            if (!created) {
-                throw Exception()
+//        println(event.type)
+//        println(event.id)
+        var stripeObject: StripeObject? = null
+        stripeObject = event.dataObjectDeserializer.deserializeUnsafe();
+        when(event.type){
+            "payment_intent.succeeded" -> {
+                val paymentIntent = stripeObject as PaymentIntent
+                val paymentID = UUID.fromString(paymentIntent.metadata["paymentID"])
+//                print("paymentID: ")
+//                println(paymentID)
+                PaymentEsService.update(paymentID) {
+                    it.proceedPaymentCommand(paymentId = paymentID,
+                        description = paymentIntent.metadata["film"].toString())
+                }
             }
         }
+
     }
 
     @PutMapping("/{id}/reject")

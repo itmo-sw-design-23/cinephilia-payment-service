@@ -15,7 +15,7 @@ import java.util.*
 class PaymentAggregate : Aggregate
 
 class PaymentAggregateState : AggregateState<UUID, PaymentAggregate> {
-    lateinit var paymentId: UUID
+    var paymentId: UUID = UUID.randomUUID()
     private lateinit var externalId: UUID
     var createdAt: Long = System.currentTimeMillis()
     var closedAt: Long? = null

@@ -7,12 +7,12 @@ Content-Type: application/json
     "id": "246a7cfd-99ce-4054-9077-84b82ec86a68"
   },
   "movie": {
-    "id": "246a7cfd-99ce-4054-9077-84b82ec86a68",
-    "price": "500.0"
+    "id": "246a7c1d-99ce-4054-9077-84b82ec86a68",
+    "price": "555.0"
   }
 }
 
 ###
 
-GET localhost:8080/payments/eaea8e3d-ee38-4ea9-af6b-dd19a4c06aa4
+GET localhost:8080/payments/dcc60c66-bb5c-4489-8af1-91e6aeddd9e1
 Accept: application/json
