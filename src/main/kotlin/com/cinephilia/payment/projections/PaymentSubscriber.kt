@@ -25,4 +25,8 @@ class PaymentSubscriber {
     fun paymentSuccededSubscriber(event: PaymentSuccededEvent) {
         logger.info("Payment succeded: {}", event.paymentId)
     }
+    @SubscribeEvent
+    fun paymentCanceledSubscriber(event: PaymentCanceledEvent) {
+        logger.info("Payment canceled: {}", event.paymentId)
+    }
 }

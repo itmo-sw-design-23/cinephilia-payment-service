@@ -73,6 +73,13 @@ class PaymentController(
                         description = paymentIntent.metadata["film"].toString())
                 }
             }
+            "payment_intent.payment_failed", "payment_intent.canceled" -> {
+                val paymentIntent = stripeObject as PaymentIntent
+                val paymentID = UUID.fromString(paymentIntent.metadata["paymentID"])
+                PaymentEsService.update(paymentID) {
+                    it.cancelPaymentCommand(paymentId = paymentID)
+                }
+            }
         }
 
     }
