@@ -1,0 +1,160 @@
+openapi: 3.0.3
+info:
+  title: Payment Service API
+  version: 1.0.0
+servers:
+  - url: 'https'
+paths:
+  /payments:
+    put:
+      tags:
+        - Payment
+      summary: Create a payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentRequestDto'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePaymentResponseDto'
+  /payments/{id}:
+    get:
+      tags:
+        - Payment
+      summary: Get a payment by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentAggregateState'
+    put:
+      tags:
+        - Payment
+      summary: Cancel a payment
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Successful operation
+  /payments/proceed:
+    post:
+      tags:
+        - Payment
+      summary: Proceed a payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '204':
+          description: Successful operation
+
+  /payments/{id}/reject:
+    put:
+      tags:
+        - Payment
+      summary: Reject a payment
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectPaymentDto'
+      responses:
+        '204':
+          description: Successful operation
+components:
+  schemas:
+    CreatePaymentRequestDto:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        movie:
+          $ref: '#/components/schemas/Movie'
+    CreatePaymentResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    RejectPaymentDto:
+      type: object
+      properties:
+        description:
+          type: string
+    PaymentAggregateState:
+      type: object
+      properties:
+        paymentId:
+          type: string
+          format: uuid
+        externalId:
+          type: string
+          format: uuid
+        createdAt:
+          type: integer
+          format: int64
+        closedAt:
+          type: integer
+          format: int64
+        status:
+          $ref: '#/components/schemas/PaymentStatus'
+        user:
+          $ref: '#/components/schemas/User'
+        movie:
+          $ref: '#/components/schemas/Movie'
+      required:
+        - paymentId
+        - createdAt
+        - status
+    PaymentStatus:
+      type: string
+      enum:
+        - New
+        - Canceled
+        - Succeded
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    Movie:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        price:
+          type: number
+          format: double
