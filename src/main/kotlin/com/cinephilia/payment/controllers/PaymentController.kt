@@ -3,9 +3,9 @@ package com.cinephilia.payment.controllers
 import com.cinephilia.payment.commands.cancelPaymentCommand
 import com.cinephilia.payment.commands.createPaymentCommand
 import com.cinephilia.payment.commands.rejectPaymentCommand
-import com.cinephilia.payment.dtos.CreatePaymentRequestDto
-import com.cinephilia.payment.dtos.CreatePaymentResponseDto
-import com.cinephilia.payment.dtos.RejectPaymentDto
+import com.cinephilia.payment.model.CreatePaymentRequestDto
+import com.cinephilia.payment.model.CreatePaymentResponseDto
+import com.cinephilia.payment.model.RejectPaymentDto
 import com.cinephilia.payment.enitites.PaymentAggregate
 import com.cinephilia.payment.enitites.PaymentAggregateState
 import com.stripe.exception.SignatureVerificationException

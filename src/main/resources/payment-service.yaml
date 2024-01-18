@@ -96,6 +96,9 @@ components:
   schemas:
     CreatePaymentRequestDto:
       type: object
+      required: # List the required properties here
+        - user
+        - movie
       properties:
         user:
           $ref: '#/components/schemas/User'
@@ -103,12 +106,16 @@ components:
           $ref: '#/components/schemas/Movie'
     CreatePaymentResponseDto:
       type: object
+      required: # List the required properties here
+        - id
       properties:
         id:
           type: string
           format: uuid
     RejectPaymentDto:
       type: object
+      required: # List the required properties here
+        - description
       properties:
         description:
           type: string

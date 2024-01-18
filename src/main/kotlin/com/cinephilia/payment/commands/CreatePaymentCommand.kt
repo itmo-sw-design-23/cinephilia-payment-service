@@ -1,8 +1,8 @@
 package com.cinephilia.payment.commands
 
-import com.cinephilia.payment.enitites.Movie
+import com.cinephilia.payment.model.Movie
 import com.cinephilia.payment.enitites.PaymentAggregateState
-import com.cinephilia.payment.enitites.User
+import com.cinephilia.payment.model.User
 import com.cinephilia.payment.events.PaymentCreatedEvent
 import java.util.*
 

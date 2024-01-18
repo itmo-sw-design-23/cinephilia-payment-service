@@ -1,6 +1,8 @@
 package com.cinephilia.payment.enitites
 
-import com.cinephilia.payment.enitites.enums.PaymentStatus
+import com.cinephilia.payment.model.User
+import com.cinephilia.payment.model.Movie
+import com.cinephilia.payment.model.PaymentStatus
 import com.cinephilia.payment.events.PaymentCanceledEvent
 import com.cinephilia.payment.events.PaymentCreatedEvent
 import com.cinephilia.payment.events.PaymentFailedEvent
@@ -19,7 +21,7 @@ class PaymentAggregateState : AggregateState<UUID, PaymentAggregate> {
     private lateinit var externalId: UUID
     var createdAt: Long = System.currentTimeMillis()
     var closedAt: Long? = null
-    var status: PaymentStatus = PaymentStatus.New
+    var status: PaymentStatus = PaymentStatus.new
 
     lateinit var user: User
     lateinit var movie: Movie
@@ -37,19 +39,19 @@ class PaymentAggregateState : AggregateState<UUID, PaymentAggregate> {
     @StateTransitionFunc
     fun applyPaymentFailed(event: PaymentFailedEvent) {
         closedAt = event.createdAt
-        status = PaymentStatus.Canceled
+        status = PaymentStatus.canceled
     }
 
     @StateTransitionFunc
     fun applyPaymentSucceded(event: PaymentSuccededEvent) {
         closedAt = event.createdAt
-        status = PaymentStatus.Succeded
+        status = PaymentStatus.succeded
     }
 
     @StateTransitionFunc
     fun applyPaymentCanceled(event: PaymentCanceledEvent) {
         closedAt = event.createdAt
-        status = PaymentStatus.Canceled
+        status = PaymentStatus.canceled
     }
 }
 
