@@ -8,13 +8,12 @@ import com.cinephilia.payment.enitites.PaymentAggregateState
 import com.cinephilia.payment.model.CreatePaymentRequestDto
 import com.cinephilia.payment.model.CreatePaymentResponseDto
 import com.cinephilia.payment.model.RejectPaymentDto
-import com.stripe.model.Event
-import com.stripe.net.Webhook
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import ru.quipy.core.EventSourcingService
 import java.util.*
+import com.cinephilia.payment.model.PaymentAggregateState as PaymentAggregateStateDto
 
 @RestController
 class PaymentController(
@@ -33,12 +32,23 @@ class PaymentController(
         return ResponseEntity<CreatePaymentResponseDto>(CreatePaymentResponseDto(payment.id), HttpStatus.OK);
     }
 
-    override fun getPaymentById(id: UUID): ResponseEntity<com.cinephilia.payment.model.PaymentAggregateState> {
-        return PaymentEsService.getState(id)
+    override fun getPaymentById(id: UUID): ResponseEntity<PaymentAggregateStateDto> {
+        val currentState = PaymentEsService.getState(id) ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+
+        val dto = PaymentAggregateStateDto(
+            currentState.paymentId,
+            currentState.createdAt,
+            currentState.status,
+            externalId = null,
+            currentState.closedAt,
+            currentState.user,
+            currentState.movie)
+
+        return ResponseEntity(dto, HttpStatus.OK)
     }
 
-    override fun proceedPayment(body: String) {
-
+    override fun proceedPayment(body: String): ResponseEntity<Unit> {
+        TODO("Implement business logic")
     }
 
     override fun rejectPayment(id: UUID, rejectPaymentDto: RejectPaymentDto): ResponseEntity<Unit> {
