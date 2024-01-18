@@ -75,6 +75,12 @@ paths:
       summary: Proceed a payment
       description: Proceed a payment
       operationId: proceedPayment
+      parameters:
+        - in: header
+          required: true
+          name: Stripe-Signature
+          schema:
+            type: string
       requestBody:
         required: true
         content:
