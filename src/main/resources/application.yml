@@ -1,0 +1,22 @@
+# MongoDB properties
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: tiny-es
+  kafka:
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    topics:
+      movie-purchased: cinephilia.payments.movie-purchased
+
+# Tiny event sourcing library properties
+event:
+  sourcing:
+    auto-scan-enabled: true
+    scan-package: com.cinephilia.payment
+    snapshot-frequency: 100
+
+server:
+  port: 8081
