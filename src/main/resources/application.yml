@@ -10,6 +10,7 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     topics:
       movie-purchased: cinephilia.payments.movie-purchased
+    bootstrap-servers: "localhost:29092"
 
 # Tiny event sourcing library properties
 event:
@@ -17,6 +18,3 @@ event:
     auto-scan-enabled: true
     scan-package: com.cinephilia.payment
     snapshot-frequency: 100
-
-server:
-  port: 8081
