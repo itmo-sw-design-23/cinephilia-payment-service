@@ -1,0 +1,190 @@
+openapi: 3.0.3
+info:
+  title: Payment Service API
+  version: 1.0.0
+servers:
+  - url: 'https://localhost:8080/api/v1'
+paths:
+  /payments:
+    put:
+      tags:
+        - Payment
+      summary: Create a payment
+      description: Create a payment
+      operationId: createPayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentRequestDto'
+      responses:
+        '200':
+          description: Payment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePaymentResponseDto'
+        '404':
+          $ref: '#/components/responses/404'
+  /payments/{id}:
+    get:
+      tags:
+        - Payment
+      summary: Get a payment by ID
+      description: Get a payment by ID
+      operationId: getPaymentById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentAggregateState'
+        '404':
+          $ref: '#/components/responses/404'
+    put:
+      tags:
+        - Payment
+      summary: Cancel a payment
+      description: Cancel a payment
+      operationId: cancelPayment
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Payment canceled
+        '404':
+          $ref: '#/components/responses/404'
+  /payments/proceed:
+    post:
+      tags:
+        - Payment
+      summary: Proceed a payment
+      description: Proceed a payment
+      operationId: proceedPayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Payment proceeded
+        '404':
+          $ref: '#/components/responses/404'
+
+  /payments/{id}/reject:
+    put:
+      tags:
+        - Payment
+      summary: Reject a payment
+      description: Reject a payment
+      operationId: rejectPayment
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectPaymentDto'
+      responses:
+        '200':
+          description: Payment rejected
+        '404':
+          $ref: '#/components/responses/404'
+components:
+  responses:
+    '404':
+      description: Payment not found
+  schemas:
+    CreatePaymentRequestDto:
+      type: object
+      required: # List the required properties here
+        - user
+        - movie
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        movie:
+          $ref: '#/components/schemas/Movie'
+    CreatePaymentResponseDto:
+      type: object
+      required: # List the required properties here
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+    RejectPaymentDto:
+      type: object
+      required: # List the required properties here
+        - description
+      properties:
+        description:
+          type: string
+    PaymentAggregateState:
+      type: object
+      properties:
+        paymentId:
+          type: string
+          format: uuid
+        externalId:
+          type: string
+          format: uuid
+        createdAt:
+          type: integer
+          format: int64
+        closedAt:
+          type: integer
+          format: int64
+        status:
+          $ref: '#/components/schemas/PaymentStatus'
+        user:
+          $ref: '#/components/schemas/User'
+        movie:
+          $ref: '#/components/schemas/Movie'
+      required:
+        - paymentId
+        - createdAt
+        - status
+    PaymentStatus:
+      type: string
+      enum:
+        - New
+        - Canceled
+        - Succeded
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    Movie:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        price:
+          type: number
+          format: double

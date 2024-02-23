@@ -1,6 +1,8 @@
 package com.cinephilia.payment.enitites
 
-import com.cinephilia.payment.enitites.enums.PaymentStatus
+import com.cinephilia.payment.model.User
+import com.cinephilia.payment.model.Movie
+import com.cinephilia.payment.model.PaymentStatus
 import com.cinephilia.payment.events.PaymentCanceledEvent
 import com.cinephilia.payment.events.PaymentCreatedEvent
 import com.cinephilia.payment.events.PaymentFailedEvent
@@ -15,14 +17,14 @@ import java.util.*
 class PaymentAggregate : Aggregate
 
 class PaymentAggregateState : AggregateState<UUID, PaymentAggregate> {
-    private lateinit var paymentId: UUID
+    lateinit var paymentId: UUID
     private lateinit var externalId: UUID
-    private var createdAt: Long = System.currentTimeMillis()
-    private var closedAt: Long? = null
-    private var status: PaymentStatus = PaymentStatus.New
+    var createdAt: Long = System.currentTimeMillis()
+    var closedAt: Long? = null
+    var status: PaymentStatus = PaymentStatus.new
 
-    private lateinit var user: User
-    private lateinit var movie: Movie
+    lateinit var user: User
+    lateinit var movie: Movie
 
     override fun getId() = paymentId
 
@@ -37,20 +39,19 @@ class PaymentAggregateState : AggregateState<UUID, PaymentAggregate> {
     @StateTransitionFunc
     fun applyPaymentFailed(event: PaymentFailedEvent) {
         closedAt = event.createdAt
-        status = PaymentStatus.Canceled
+        status = PaymentStatus.canceled
     }
 
     @StateTransitionFunc
     fun applyPaymentSucceded(event: PaymentSuccededEvent) {
         closedAt = event.createdAt
-        externalId = event.externalId
-        status = PaymentStatus.Succeded
+        status = PaymentStatus.succeded
     }
 
     @StateTransitionFunc
     fun applyPaymentCanceled(event: PaymentCanceledEvent) {
         closedAt = event.createdAt
-        status = PaymentStatus.Canceled
+        status = PaymentStatus.canceled
     }
 }
 

@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class CinephiliaPaymentServiceApplication
 
 fun main(args: Array<String>) {
-    runApplication<CinephiliaPaymentServiceApplication>(*args)
+	runApplication<CinephiliaPaymentServiceApplication>(*args)
 }
