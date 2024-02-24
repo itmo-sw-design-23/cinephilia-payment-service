@@ -50,24 +50,15 @@ class PaymentController(
 
         var event: Event? = null
 
-        // Verify webhook signature and extract the event.
-        // See https://stripe.com/docs/webhooks#verify-events for more information.
-
-        // Verify webhook signature and extract the event.
-        // See https://stripe.com/docs/webhooks#verify-events for more information.
         event = Webhook.constructEvent(
             payload, sigHeader, endpointSecret
         )
-//        println(event.type)
-//        println(event.id)
         var stripeObject: StripeObject? = null
         stripeObject = event.dataObjectDeserializer.deserializeUnsafe();
         when(event.type){
             "payment_intent.succeeded" -> {
                 val paymentIntent = stripeObject as PaymentIntent
                 val paymentID = UUID.fromString(paymentIntent.metadata["paymentID"])
-//                print("paymentID: ")
-//                println(paymentID)
                 PaymentEsService.update(paymentID) {
                     it.proceedPaymentCommand(paymentId = paymentID,
                         description = paymentIntent.metadata["film"].toString())
