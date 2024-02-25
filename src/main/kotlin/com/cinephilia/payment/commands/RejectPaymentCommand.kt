@@ -1,7 +1,7 @@
 package com.cinephilia.payment.commands
 
 import com.cinephilia.payment.enitites.PaymentAggregateState
-import com.cinephilia.payment.events.PaymentFailedEvent
+import com.cinephilia.payment.domain_events.PaymentFailedEvent
 import java.util.*
 
 fun PaymentAggregateState.rejectPaymentCommand(

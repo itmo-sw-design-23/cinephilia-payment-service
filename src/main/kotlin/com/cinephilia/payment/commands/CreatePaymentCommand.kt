@@ -3,7 +3,7 @@ package com.cinephilia.payment.commands
 import com.cinephilia.payment.model.Movie
 import com.cinephilia.payment.enitites.PaymentAggregateState
 import com.cinephilia.payment.model.User
-import com.cinephilia.payment.events.PaymentCreatedEvent
+import com.cinephilia.payment.domain_events.PaymentCreatedEvent
 import java.util.*
 
 fun PaymentAggregateState.createPaymentCommand(

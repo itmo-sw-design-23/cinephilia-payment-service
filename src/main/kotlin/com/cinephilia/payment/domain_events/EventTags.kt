@@ -1,4 +1,4 @@
-package com.cinephilia.payment.events
+package com.cinephilia.payment.domain_events
 
 const val PAYMENT_CREATED_EVENT_TAG = "PaymentCreated"
 const val PAYMENT_FAILED_EVENT_TAG = "PaymentFailed"

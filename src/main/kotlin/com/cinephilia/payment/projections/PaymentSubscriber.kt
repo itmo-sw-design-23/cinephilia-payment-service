@@ -4,8 +4,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import com.cinephilia.payment.enitites.PaymentAggregate
-import com.cinephilia.payment.events.PaymentCanceledEvent
-import com.cinephilia.payment.events.PaymentCreatedEvent
+import com.cinephilia.payment.domain_events.PaymentCreatedEvent
 import ru.quipy.streams.annotation.AggregateSubscriber
 import ru.quipy.streams.annotation.SubscribeEvent
 
