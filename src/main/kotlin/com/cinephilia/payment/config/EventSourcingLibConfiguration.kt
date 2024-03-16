@@ -36,7 +36,7 @@ import javax.annotation.PostConstruct
 @Configuration
 class EventSourcingLibConfiguration {
 
-    private val logger = LoggerFactory.getLogger(com.cinephilia.payment.config.EventSourcingLibConfiguration::class.java)
+    private val logger = LoggerFactory.getLogger(EventSourcingLibConfiguration::class.java)
 
     @Autowired
     private lateinit var subscriptionsManager: AggregateSubscriptionsManager

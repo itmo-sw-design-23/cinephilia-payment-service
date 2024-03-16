@@ -1,5 +1,6 @@
 package com.cinephilia.payment.projections
 
+import com.cinephilia.payment.domain_events.PaymentCanceledEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service

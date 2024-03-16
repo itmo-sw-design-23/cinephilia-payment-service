@@ -2,14 +2,22 @@ package com.cinephilia.payment.controllers
 
 import com.cinephilia.payment.commands.cancelPaymentCommand
 import com.cinephilia.payment.commands.createPaymentCommand
+import com.cinephilia.payment.commands.proceedPaymentCommand
 import com.cinephilia.payment.commands.rejectPaymentCommand
 import com.cinephilia.payment.enitites.PaymentAggregate
 import com.cinephilia.payment.enitites.PaymentAggregateState
 import com.cinephilia.payment.model.CreatePaymentRequestDto
 import com.cinephilia.payment.model.CreatePaymentResponseDto
 import com.cinephilia.payment.model.RejectPaymentDto
+import com.stripe.model.Event
+import com.stripe.model.PaymentIntent
+import com.stripe.model.StripeObject
+import com.stripe.net.Webhook
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RestController
 import ru.quipy.core.EventSourcingService
 import java.util.*
@@ -58,15 +66,18 @@ class PaymentController(
         )
         var stripeObject: StripeObject? = null
         stripeObject = event.dataObjectDeserializer.deserializeUnsafe();
-        when(event.type){
+        when (event.type) {
             "payment_intent.succeeded" -> {
                 val paymentIntent = stripeObject as PaymentIntent
                 val paymentID = UUID.fromString(paymentIntent.metadata["paymentID"])
                 PaymentEsService.update(paymentID) {
-                    it.proceedPaymentCommand(paymentId = paymentID,
-                        description = paymentIntent.metadata["film"].toString())
+                    it.proceedPaymentCommand(
+                        paymentId = paymentID,
+                        description = paymentIntent.metadata["film"].toString()
+                    )
                 }
             }
+
             "payment_intent.payment_failed", "payment_intent.canceled" -> {
                 val paymentIntent = stripeObject as PaymentIntent
                 val paymentID = UUID.fromString(paymentIntent.metadata["paymentID"])
@@ -75,6 +86,7 @@ class PaymentController(
                 }
             }
         }
+    }
 
     override fun rejectPayment(id: UUID, rejectPaymentDto: RejectPaymentDto): ResponseEntity<Unit> {
         PaymentEsService.update(id) {
