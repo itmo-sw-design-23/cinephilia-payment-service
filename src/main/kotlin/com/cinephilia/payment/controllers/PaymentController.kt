@@ -2,48 +2,51 @@ package com.cinephilia.payment.controllers
 
 import com.cinephilia.payment.commands.cancelPaymentCommand
 import com.cinephilia.payment.commands.createPaymentCommand
-import com.cinephilia.payment.commands.proceedPaymentCommand
 import com.cinephilia.payment.commands.rejectPaymentCommand
-import com.cinephilia.payment.dtos.CreatePaymentRequestDto
-import com.cinephilia.payment.dtos.CreatePaymentResponseDto
-import com.cinephilia.payment.dtos.RejectPaymentDto
 import com.cinephilia.payment.enitites.PaymentAggregate
 import com.cinephilia.payment.enitites.PaymentAggregateState
-import com.stripe.model.Event
-import com.stripe.model.PaymentIntent
-import com.stripe.model.StripeObject
-import com.stripe.net.Webhook
-import org.springframework.web.bind.annotation.*
+import com.cinephilia.payment.model.CreatePaymentRequestDto
+import com.cinephilia.payment.model.CreatePaymentResponseDto
+import com.cinephilia.payment.model.RejectPaymentDto
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.RestController
 import ru.quipy.core.EventSourcingService
 import java.util.*
-
+import com.cinephilia.payment.model.PaymentAggregateState as PaymentAggregateStateDto
 
 @RestController
-@RequestMapping("/payments")
 class PaymentController(
-        val PaymentEsService: EventSourcingService<UUID, PaymentAggregate, PaymentAggregateState>
-) {
+    val PaymentEsService: EventSourcingService<UUID, PaymentAggregate, PaymentAggregateState>
+) : PaymentApi {
 
-    @PutMapping
-    fun createPayment(@RequestBody dto: CreatePaymentRequestDto): CreatePaymentResponseDto {
-        val payment = PaymentEsService.create {it.createPaymentCommand(user = dto.user, movie = dto.movie) }
-
-        return CreatePaymentResponseDto(payment.id);
-    }
-
-    @GetMapping("/{id}")
-    fun getPayment(@PathVariable id: UUID): PaymentAggregateState? {
-        return PaymentEsService.getState(id)
-    }
-
-    @PutMapping("/{id}/cancel")
-    fun cancelPayment(@PathVariable id: UUID) {
+    override fun cancelPayment(id: UUID): ResponseEntity<Unit> {
         PaymentEsService.update(id) {
             it.cancelPaymentCommand(id)
         }
+        return ResponseEntity<Unit>(HttpStatus.OK)
     }
 
-    var created : Boolean = false
+    override fun createPayment(createPaymentRequestDto: CreatePaymentRequestDto): ResponseEntity<CreatePaymentResponseDto> {
+        val payment = PaymentEsService.create {it.createPaymentCommand(user = createPaymentRequestDto.user, movie = createPaymentRequestDto.movie) }
+        return ResponseEntity<CreatePaymentResponseDto>(CreatePaymentResponseDto(payment.id), HttpStatus.OK);
+    }
+
+    override fun getPaymentById(id: UUID): ResponseEntity<PaymentAggregateStateDto> {
+        val currentState = PaymentEsService.getState(id) ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+
+        val dto = PaymentAggregateStateDto(
+            currentState.paymentId,
+            currentState.createdAt,
+            currentState.status,
+            externalId = null,
+            currentState.closedAt,
+            currentState.user,
+            currentState.movie)
+
+        return ResponseEntity(dto, HttpStatus.OK)
+    }
+
     @PostMapping("/proceed")
     fun proceedPayment(@RequestBody payload: String, @RequestHeader("Stripe-Signature") sigHeader: String) {
         val endpointSecret = "whsec_95e2a691360d96b09df1403804b329991c6dff44872dca42b15bf05175fe7129"
@@ -73,12 +76,11 @@ class PaymentController(
             }
         }
 
-    }
-
-    @PutMapping("/{id}/reject")
-    fun rejectPayment(@PathVariable id: UUID, @RequestBody dto: RejectPaymentDto) {
+    override fun rejectPayment(id: UUID, rejectPaymentDto: RejectPaymentDto): ResponseEntity<Unit> {
         PaymentEsService.update(id) {
-            it.rejectPaymentCommand(id, dto.description)
+            it.rejectPaymentCommand(id, rejectPaymentDto.description)
         }
+        return ResponseEntity<Unit>(HttpStatus.OK)
+
     }
 }
