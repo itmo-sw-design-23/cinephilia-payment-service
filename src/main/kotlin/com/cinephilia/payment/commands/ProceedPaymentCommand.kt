@@ -1,7 +1,7 @@
 package com.cinephilia.payment.commands
 
 import com.cinephilia.payment.enitites.PaymentAggregateState
-import com.cinephilia.payment.events.PaymentSuccededEvent
+import com.cinephilia.payment.domain_events.PaymentSuccededEvent
 import java.util.*
 
 fun PaymentAggregateState.proceedPaymentCommand(

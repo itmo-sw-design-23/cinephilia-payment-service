@@ -1,4 +1,4 @@
-package com.cinephilia.payment.events
+package com.cinephilia.payment.domain_events
 
 import com.cinephilia.payment.enitites.PaymentAggregate
 import ru.quipy.core.annotations.DomainEvent
