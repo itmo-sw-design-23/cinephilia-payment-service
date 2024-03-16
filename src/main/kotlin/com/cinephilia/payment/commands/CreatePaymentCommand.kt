@@ -11,8 +11,6 @@ fun PaymentAggregateState.createPaymentCommand(
         user: User,
         movie: Movie,
 ): PaymentCreatedEvent {
-    // TODO: business logic
-    
     return PaymentCreatedEvent(
         paymentId = paymentId,
         user = user,

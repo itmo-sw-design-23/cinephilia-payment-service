@@ -1,0 +1,18 @@
+PUT localhost:8080/payments
+Accept: application/json
+Content-Type: application/json
+
+{
+  "user": {
+    "id": "246a7cfd-99ce-4054-9077-84b82ec86a68"
+  },
+  "movie": {
+    "id": "246a7c1d-99ce-4054-9077-84b82ec86a68",
+    "price": "555.0"
+  }
+}
+
+###
+
+GET localhost:8080/payments/019872e0-90cc-4374-929b-4dba4f30a5b3
+Accept: application/json
