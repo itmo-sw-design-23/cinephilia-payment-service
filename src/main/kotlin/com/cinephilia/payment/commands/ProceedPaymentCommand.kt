@@ -6,10 +6,14 @@ import java.util.*
 
 fun PaymentAggregateState.proceedPaymentCommand(
     paymentId: UUID = UUID.randomUUID(),
-    description: String
+    description: String,
+    movieId: UUID,
+    userId: UUID
 ): PaymentSuccededEvent {
     return PaymentSuccededEvent(
         paymentId = paymentId,
-        description = description
+        description = description,
+        movieId = movieId,
+        userId = userId
     )
 }

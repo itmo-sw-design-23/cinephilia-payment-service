@@ -65,15 +65,21 @@ class PaymentController(
             payload, sigHeader, endpointSecret
         )
         var stripeObject: StripeObject? = null
-        stripeObject = event.dataObjectDeserializer.deserializeUnsafe();
+        stripeObject = event.dataObjectDeserializer.deserializeUnsafe()
+
         when (event.type) {
             "payment_intent.succeeded" -> {
                 val paymentIntent = stripeObject as PaymentIntent
+
                 val paymentID = UUID.fromString(paymentIntent.metadata["paymentID"])
+                val currentState = PaymentEsService.getState(paymentID)
+
                 PaymentEsService.update(paymentID) {
                     it.proceedPaymentCommand(
                         paymentId = paymentID,
-                        description = paymentIntent.metadata["film"].toString()
+                        description = paymentIntent.metadata["film"].toString(),
+                        movieId = currentState!!.movie.id!!,
+                        userId = currentState.user.id!!
                     )
                 }
             }
