@@ -1,10 +1,5 @@
 # MongoDB properties
 spring:
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      database: tiny-es
   kafka:
     producer:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer

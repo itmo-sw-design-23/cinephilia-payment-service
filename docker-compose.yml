@@ -1,12 +1,22 @@
 version: "3.9"
 services:
+  backend:
+    image: kawwik/payment-service
+    ports:
+      - 8080:80
+    networks:
+      - backend
+    environment:
+      SPRING__DATA__MONGODB__URI: mongodb://mongo:27017/
+      SPRING__KAFKA__BOOTSTRAP-SERVERS: "kafka:29092"
+
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
+    networks:
+      - kafka
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - 22181:2181
 
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -14,6 +24,9 @@ services:
       - zookeeper
     ports:
       - 29092:29092
+    networks:
+      - kafka
+      - backend
     environment:
       KAFKA_CREATE_TOPICS: "cinephilia.payments.movie-purchased:1:1"
       KAFKA_BROKER_ID: 1
@@ -25,6 +38,8 @@ services:
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
+    networks:
+      - kafka
     ports:
       - "9000:8080"
     environment:
@@ -33,11 +48,17 @@ services:
   mongo:
     build:
       context: mongoDb
-#      dockerfile: mongoDb/Dockerfile
     restart: always
     ports:
       - 27017:27017
     volumes:
       - mongo_data:/data/db
+    networks:
+      - backend
+
 volumes:
   mongo_data: { }
+
+networks:
+  kafka:
+  backend:
