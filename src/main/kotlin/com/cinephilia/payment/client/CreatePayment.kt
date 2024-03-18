@@ -11,7 +11,6 @@ fun CreatePayment(
     Stripe.apiKey =
         "sk_test_51ONCV8CAmt1jJUuJwoJqkXtV7oynCR1q26fDrH0DSdg61lSPdYcBm6rtJSw2w1reDwzxI7dAObZSpkIs30bscsiO00kJ9Bdwgd"
 
-
     val price: String = CreatePrice(film)
     val params = SessionCreateParams.builder()
         .addLineItem(
