@@ -11,12 +11,12 @@ fun CreatePayment(
 ): String {
     Stripe.apiKey = System.getenv("STRIPE_API_KEY")
 
-    val price: String = CreatePrice(film)
+    val price: String = CreatePrice(film, priceAmount)
     val params = SessionCreateParams.builder()
         .addLineItem(
             SessionCreateParams.LineItem.builder()
                 .setPrice(price)
-                .setQuantity(priceAmount)
+                .setQuantity(1)
                 .build()
         )
         .setMode(SessionCreateParams.Mode.PAYMENT)
