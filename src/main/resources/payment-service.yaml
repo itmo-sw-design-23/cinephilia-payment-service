@@ -3,7 +3,7 @@ info:
   title: Payment Service API
   version: 1.0.0
 servers:
-  - url: 'https://localhost:8080/api/v1'
+  - url: 'https://localhost:8080/payments/api/v1'
 paths:
   /payments:
     put:
@@ -68,13 +68,19 @@ paths:
           description: Payment canceled
         '404':
           $ref: '#/components/responses/404'
-  /payments/proceed:
+  /proceed:
     post:
       tags:
         - Payment
       summary: Proceed a payment
       description: Proceed a payment
       operationId: proceedPayment
+      parameters:
+        - in: header
+          name: Stripe-Signature
+          schema:
+            type: string
+
       requestBody:
         required: true
         content:

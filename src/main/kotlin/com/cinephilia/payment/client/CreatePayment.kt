@@ -8,8 +8,7 @@ fun CreatePayment(
     film: String,
     paymentID: UUID
 ): Boolean {
-    Stripe.apiKey =
-        "sk_test_51ONCV8CAmt1jJUuJwoJqkXtV7oynCR1q26fDrH0DSdg61lSPdYcBm6rtJSw2w1reDwzxI7dAObZSpkIs30bscsiO00kJ9Bdwgd"
+    Stripe.apiKey = System.getenv("STRIPE_API_KEY")
 
     val price: String = CreatePrice(film)
     val params = SessionCreateParams.builder()

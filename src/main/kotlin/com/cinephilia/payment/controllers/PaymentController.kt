@@ -15,9 +15,6 @@ import com.stripe.model.StripeObject
 import com.stripe.net.Webhook
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RestController
 import ru.quipy.core.EventSourcingService
 import java.util.*
@@ -55,14 +52,13 @@ class PaymentController(
         return ResponseEntity(dto, HttpStatus.OK)
     }
 
-    @PostMapping("/proceed")
-    fun proceedPayment(@RequestBody payload: String, @RequestHeader("Stripe-Signature") sigHeader: String) {
-        val endpointSecret = "whsec_95e2a691360d96b09df1403804b329991c6dff44872dca42b15bf05175fe7129"
+    override fun proceedPayment(body: String, stripeSignature: String?): ResponseEntity<Unit> {
+        val endpointSecret = System.getenv("STRIPE_SIGNATURE_KEY")
 
         var event: Event? = null
 
         event = Webhook.constructEvent(
-            payload, sigHeader, endpointSecret
+            body, stripeSignature, endpointSecret
         )
         var stripeObject: StripeObject? = null
         stripeObject = event.dataObjectDeserializer.deserializeUnsafe()
@@ -92,6 +88,8 @@ class PaymentController(
                 }
             }
         }
+
+        return ResponseEntity<Unit>(HttpStatus.OK)
     }
 
     override fun rejectPayment(id: UUID, rejectPaymentDto: RejectPaymentDto): ResponseEntity<Unit> {
