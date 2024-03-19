@@ -1,4 +1,8 @@
 # MongoDB properties
+# swagger-ui custom path
+
+springdoc.swagger-ui.path: "/swagger"
+
 spring:
   kafka:
     producer:
