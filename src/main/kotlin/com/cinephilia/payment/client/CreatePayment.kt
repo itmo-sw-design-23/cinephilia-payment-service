@@ -6,6 +6,7 @@ import java.util.*
 
 fun CreatePayment(
     film: String,
+    priceAmount: Long,
     paymentID: UUID
 ): String {
     Stripe.apiKey = System.getenv("STRIPE_API_KEY")
@@ -15,7 +16,7 @@ fun CreatePayment(
         .addLineItem(
             SessionCreateParams.LineItem.builder()
                 .setPrice(price)
-                .setQuantity(1L)
+                .setQuantity(priceAmount)
                 .build()
         )
         .setMode(SessionCreateParams.Mode.PAYMENT)

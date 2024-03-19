@@ -12,7 +12,7 @@ fun PaymentAggregateState.createPaymentCommand(
         user: User,
         movie: Movie,
 ): PaymentCreatedEvent {
-    val paymentLink = CreatePayment(movie.name, paymentId)
+    val paymentLink = CreatePayment(movie.name, movie.price.toLong(), paymentId)
 
     return PaymentCreatedEvent(
         paymentId = paymentId,
