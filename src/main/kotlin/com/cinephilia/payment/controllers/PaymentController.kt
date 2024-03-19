@@ -33,8 +33,14 @@ class PaymentController(
     }
 
     override fun createPayment(createPaymentRequestDto: CreatePaymentRequestDto): ResponseEntity<CreatePaymentResponseDto> {
-        val payment = PaymentEsService.create {it.createPaymentCommand(user = createPaymentRequestDto.user, movie = createPaymentRequestDto.movie) }
-        return ResponseEntity<CreatePaymentResponseDto>(CreatePaymentResponseDto(payment.id), HttpStatus.OK);
+        val event = PaymentEsService.create {
+            it.createPaymentCommand(user = createPaymentRequestDto.user, movie = createPaymentRequestDto.movie)
+        }
+
+        return ResponseEntity<CreatePaymentResponseDto>(
+            CreatePaymentResponseDto(event.paymentId, event.paymentLink),
+            HttpStatus.OK
+        );
     }
 
     override fun getPaymentById(id: UUID): ResponseEntity<PaymentAggregateStateDto> {
@@ -47,7 +53,8 @@ class PaymentController(
             externalId = null,
             currentState.closedAt,
             currentState.user,
-            currentState.movie)
+            currentState.movie
+        )
 
         return ResponseEntity(dto, HttpStatus.OK)
     }

@@ -12,6 +12,7 @@ class PaymentCreatedEvent(
         val paymentId: UUID,
         val user: User,
         val movie: Movie,
+        val paymentLink: String,
         createdAt: Long = System.currentTimeMillis()
 ) : Event<PaymentAggregate>(
     name = PAYMENT_CREATED_EVENT_TAG,

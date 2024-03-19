@@ -137,10 +137,13 @@ components:
       type: object
       required: # List the required properties here
         - id
+        - paymentLink
       properties:
         id:
           type: string
           format: uuid
+        paymentLink:
+          type: string
     RejectPaymentDto:
       type: object
       required: # List the required properties here
@@ -181,12 +184,18 @@ components:
         - Succeded
     User:
       type: object
+      required:
+        - id
       properties:
         id:
           type: string
           format: uuid
     Movie:
       type: object
+      required:
+        - id
+        - price
+        - name
       properties:
         id:
           type: string
@@ -194,3 +203,5 @@ components:
         price:
           type: number
           format: double
+        name:
+          type: string

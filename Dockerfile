@@ -4,7 +4,7 @@ RUN mkdir -p /app && \
     chown 1001:0 /app && \
     rm -rf /var/lib/apt/lists/*
 
-ENV SERVER__PORT="80"
+ENV SERVER__PORT="8080"
 
 USER 1001
 

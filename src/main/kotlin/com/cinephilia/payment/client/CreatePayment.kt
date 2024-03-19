@@ -7,7 +7,7 @@ import java.util.*
 fun CreatePayment(
     film: String,
     paymentID: UUID
-): Boolean {
+): String {
     Stripe.apiKey = System.getenv("STRIPE_API_KEY")
 
     val price: String = CreatePrice(film)
@@ -32,7 +32,7 @@ fun CreatePayment(
     val requestOptions: RequestOptions =
         RequestOptions.builder().setStripeAccount("acct_1ONCV8CAmt1jJUuJ").build()
     val session = Session.create(params, requestOptions)
-    println(session.url)
-    return true
+
+    return session.url
 }
 
