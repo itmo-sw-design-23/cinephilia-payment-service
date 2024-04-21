@@ -9,6 +9,8 @@ import com.cinephilia.payment.enitites.PaymentAggregateState
 import com.cinephilia.payment.model.CreatePaymentRequestDto
 import com.cinephilia.payment.model.CreatePaymentResponseDto
 import com.cinephilia.payment.model.RejectPaymentDto
+import com.cinephilia.payment.services.JwtService
+import com.cinephilia.payment.services.User
 import com.stripe.model.Event
 import com.stripe.model.PaymentIntent
 import com.stripe.model.StripeObject
@@ -22,17 +24,33 @@ import com.cinephilia.payment.model.PaymentAggregateState as PaymentAggregateSta
 
 @RestController
 class PaymentController(
-    val PaymentEsService: EventSourcingService<UUID, PaymentAggregate, PaymentAggregateState>
+    val PaymentEsService: EventSourcingService<UUID, PaymentAggregate, PaymentAggregateState>,
+    val JwtService: JwtService,
 ) : PaymentApi {
 
-    override fun cancelPayment(id: UUID): ResponseEntity<Unit> {
+    override fun cancelPayment(authorization: String, id: UUID): ResponseEntity<Unit> {
+        val user = getAuthorizedUser(authorization)
+            ?: return ResponseEntity<Unit>(HttpStatus.UNAUTHORIZED)
+
+        val payment = PaymentEsService.getState(id) ?: return ResponseEntity<Unit>(HttpStatus.NOT_FOUND)
+
+        if (payment.user.id != user.id)
+            return ResponseEntity<Unit>(HttpStatus.NOT_FOUND)
+
         PaymentEsService.update(id) {
             it.cancelPaymentCommand(id)
         }
+
         return ResponseEntity<Unit>(HttpStatus.OK)
     }
 
-    override fun createPayment(createPaymentRequestDto: CreatePaymentRequestDto): ResponseEntity<CreatePaymentResponseDto> {
+    override fun createPayment(authorization: String, createPaymentRequestDto: CreatePaymentRequestDto): ResponseEntity<CreatePaymentResponseDto> {
+        val user = getAuthorizedUser(authorization)
+            ?: return ResponseEntity<CreatePaymentResponseDto>(HttpStatus.UNAUTHORIZED)
+
+        if (user.id != createPaymentRequestDto.user.id)
+            return ResponseEntity<CreatePaymentResponseDto>(HttpStatus.FORBIDDEN)
+
         val event = PaymentEsService.create {
             it.createPaymentCommand(user = createPaymentRequestDto.user, movie = createPaymentRequestDto.movie)
         }
@@ -43,17 +61,23 @@ class PaymentController(
         );
     }
 
-    override fun getPaymentById(id: UUID): ResponseEntity<PaymentAggregateStateDto> {
-        val currentState = PaymentEsService.getState(id) ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+    override fun getPaymentById(authorization: String, id: UUID): ResponseEntity<PaymentAggregateStateDto> {
+        val user = getAuthorizedUser(authorization)
+            ?: return ResponseEntity<PaymentAggregateStateDto>(HttpStatus.UNAUTHORIZED)
+
+        val payment = PaymentEsService.getState(id) ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+
+        if (payment.user.id != user.id)
+            return ResponseEntity<PaymentAggregateStateDto>(HttpStatus.NOT_FOUND)
 
         val dto = PaymentAggregateStateDto(
-            currentState.paymentId,
-            currentState.createdAt,
-            currentState.status,
+            payment.paymentId,
+            payment.createdAt,
+            payment.status,
             externalId = null,
-            currentState.closedAt,
-            currentState.user,
-            currentState.movie
+            payment.closedAt,
+            payment.user,
+            payment.movie
         )
 
         return ResponseEntity(dto, HttpStatus.OK)
@@ -105,5 +129,12 @@ class PaymentController(
         }
         return ResponseEntity<Unit>(HttpStatus.OK)
 
+    }
+
+    private fun getAuthorizedUser(authHeader: String): User? {
+        if (!JwtService.isJwtValid(authHeader))
+            return null
+
+        return JwtService.extractUser(authHeader);
     }
 }

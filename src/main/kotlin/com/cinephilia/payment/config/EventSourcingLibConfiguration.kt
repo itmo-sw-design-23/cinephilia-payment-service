@@ -8,6 +8,7 @@ import ru.quipy.core.EventSourcingServiceFactory
 import com.cinephilia.payment.enitites.PaymentAggregate
 import com.cinephilia.payment.enitites.PaymentAggregateState
 import com.cinephilia.payment.projections.PaymentSubscriber
+import com.cinephilia.payment.services.JwtService
 import ru.quipy.streams.AggregateEventStreamManager
 import ru.quipy.streams.AggregateSubscriptionsManager
 import java.util.*
@@ -49,6 +50,9 @@ class EventSourcingLibConfiguration {
 
     @Autowired
     private lateinit var eventStreamManager: AggregateEventStreamManager
+
+    @Autowired
+    private lateinit var jwtService: JwtService
 
     @Bean
     fun paymentEsService() = eventSourcingServiceFactory.create<UUID, PaymentAggregate, PaymentAggregateState>()
