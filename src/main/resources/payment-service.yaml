@@ -3,7 +3,7 @@ info:
   title: Payment Service API
   version: 1.0.0
 servers:
-  - url: 'https://localhost:8080/payments/api/v1'
+  - url: 'https'
 paths:
   /payments:
     put:
