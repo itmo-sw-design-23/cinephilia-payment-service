@@ -2,8 +2,10 @@ openapi: 3.0.3
 info:
   title: Payment Service API
   version: 1.0.0
+
 servers:
   - url: 'https'
+
 paths:
   /payments:
     put:
@@ -12,6 +14,10 @@ paths:
       summary: Create a payment
       description: Create a payment
       operationId: createPayment
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
       requestBody:
         required: true
         content:
@@ -34,7 +40,10 @@ paths:
       summary: Get a payment by ID
       description: Get a payment by ID
       operationId: getPaymentById
+      security:
+        - bearerAuth: [ ]
       parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
         - in: path
           name: id
           required: true
@@ -56,7 +65,10 @@ paths:
       summary: Cancel a payment
       description: Cancel a payment
       operationId: cancelPayment
+      security:
+        - bearerAuth: [ ]
       parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
         - in: path
           name: id
           required: true
@@ -119,6 +131,18 @@ paths:
         '404':
           $ref: '#/components/responses/404'
 components:
+  parameters:
+    AuthorizationHeader:
+      in: header
+      name: Authorization
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   responses:
     '404':
       description: Payment not found
