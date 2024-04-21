@@ -6,9 +6,7 @@ import com.cinephilia.payment.commands.proceedPaymentCommand
 import com.cinephilia.payment.commands.rejectPaymentCommand
 import com.cinephilia.payment.enitites.PaymentAggregate
 import com.cinephilia.payment.enitites.PaymentAggregateState
-import com.cinephilia.payment.model.CreatePaymentRequestDto
-import com.cinephilia.payment.model.CreatePaymentResponseDto
-import com.cinephilia.payment.model.RejectPaymentDto
+import com.cinephilia.payment.model.*
 import com.stripe.model.Event
 import com.stripe.model.PaymentIntent
 import com.stripe.model.StripeObject
@@ -104,6 +102,21 @@ class PaymentController(
             it.rejectPaymentCommand(id, rejectPaymentDto.description)
         }
         return ResponseEntity<Unit>(HttpStatus.OK)
+    }
 
+    override fun proceedBombardierPayment(bombardierResponse: BombardierResponse): ResponseEntity<Unit> {
+        val paymentID = bombardierResponse.paymentId
+        val currentState = PaymentEsService.getState(paymentID)!!
+
+        PaymentEsService.update(paymentID) {
+            it.proceedPaymentCommand(
+                paymentId = paymentID,
+                description = bombardierResponse.description,
+                movieId = currentState.movie.id,
+                userId = currentState.user.id
+            )
+        }
+
+        return ResponseEntity<Unit>(HttpStatus.OK)
     }
 }
