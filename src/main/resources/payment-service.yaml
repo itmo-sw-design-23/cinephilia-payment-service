@@ -92,6 +92,24 @@ paths:
           description: Payment proceeded
         '404':
           $ref: '#/components/responses/404'
+  /proceed/bombardier:
+    post:
+      tags:
+        - Payment
+      summary: Proceed a Bombardier payment
+      description: Proceed a Bombardier payment
+      operationId: proceedBombardierPayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BombardierResponse'
+      responses:
+        '200':
+          description: Payment proceeded
+        '404':
+          $ref: '#/components/responses/404'
 
   /payments/{id}/reject:
     put:
@@ -204,4 +222,15 @@ components:
           type: number
           format: double
         name:
+          type: string
+    BombardierResponse:
+      type: object
+      required:
+        - paymentId
+        - description
+      properties:
+        paymentId:
+          type: string
+          format: uuid
+        description:
           type: string
