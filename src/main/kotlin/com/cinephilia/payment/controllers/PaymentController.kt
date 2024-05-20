@@ -44,8 +44,6 @@ class PaymentController(
     }
 
     override fun getPaymentById(id: UUID): ResponseEntity<PaymentAggregateStateDto> {
-//        return ResponseEntity(HttpStatus.MULTI_STATUS)
-        metrics.incrementSuccess()
         val currentState = PaymentEsService.getState(id) ?: return ResponseEntity(HttpStatus.NOT_FOUND)
 
         val dto = PaymentAggregateStateDto(
