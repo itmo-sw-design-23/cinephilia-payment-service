@@ -1,14 +1,14 @@
 version: "3.9"
 services:
-  backend:
-    image: kawwik/payment-service
-    ports:
-      - 8080:80
-    networks:
-      - backend
-    environment:
-      SPRING__DATA__MONGODB__URI: mongodb://mongo:27017/
-      SPRING__KAFKA__BOOTSTRAP-SERVERS: "kafka:29092"
+#  backend:
+#    image: kawwik/payment-service
+#    ports:
+#      - 8080:80
+#    networks:
+#      - backend
+#    environment:
+#      SPRING__DATA__MONGODB__URI: mongodb://mongo:27017/
+#      SPRING__KAFKA__BOOTSTRAP-SERVERS: "kafka:29092"
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -56,9 +56,39 @@ services:
     networks:
       - backend
 
+  prometheus:
+    image: quay.io/prometheus/prometheus:v2.32.0
+    volumes:
+      - ./prometheus/data:/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+    ports:
+      - "9090:9090"
+    networks:
+      - external_network
+
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=quipy
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+    networks:
+      - external_network
+
 volumes:
   mongo_data: { }
+  prom_data:
 
 networks:
   kafka:
   backend:
+  external_network:
