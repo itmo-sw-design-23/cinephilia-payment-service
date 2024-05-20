@@ -150,11 +150,8 @@ components:
     CreatePaymentRequestDto:
       type: object
       required: # List the required properties here
-        - user
         - movie
       properties:
-        user:
-          $ref: '#/components/schemas/User'
         movie:
           $ref: '#/components/schemas/Movie'
     CreatePaymentResponseDto:

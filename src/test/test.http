@@ -1,12 +1,11 @@
 PUT localhost:8080/payments
 Accept: application/json
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNDZlZGFiOS01ZjE2LTRlNmQtYjc0Zi0zMjA1N2FmMDVjMmYiLCJpYXQiOjE3MTYyMzE3MjMsImV4cCI6MTcxNjIzNTMyM30.CUkrskb6VkSEE4-bU0Lsrt5MI-RxGvzw-8Tb5OcznhQ
 
 {
-  "user": {
-    "id": "246a7cfd-99ce-4054-9077-84b82ec86a68"
-  },
   "movie": {
+    "name": "Harry Potter",
     "id": "246a7c1d-99ce-4054-9077-84b82ec86a68",
     "price": "555.0"
   }

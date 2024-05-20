@@ -9,8 +9,8 @@ import com.cinephilia.payment.enitites.PaymentAggregateState
 import com.cinephilia.payment.model.CreatePaymentRequestDto
 import com.cinephilia.payment.model.CreatePaymentResponseDto
 import com.cinephilia.payment.model.RejectPaymentDto
+import com.cinephilia.payment.model.User
 import com.cinephilia.payment.services.JwtService
-import com.cinephilia.payment.services.User
 import com.stripe.model.Event
 import com.stripe.model.PaymentIntent
 import com.stripe.model.StripeObject
@@ -48,11 +48,8 @@ class PaymentController(
         val user = getAuthorizedUser(authorization)
             ?: return ResponseEntity<CreatePaymentResponseDto>(HttpStatus.UNAUTHORIZED)
 
-        if (user.id != createPaymentRequestDto.user.id)
-            return ResponseEntity<CreatePaymentResponseDto>(HttpStatus.FORBIDDEN)
-
         val event = PaymentEsService.create {
-            it.createPaymentCommand(user = createPaymentRequestDto.user, movie = createPaymentRequestDto.movie)
+            it.createPaymentCommand(user = user, movie = createPaymentRequestDto.movie)
         }
 
         return ResponseEntity<CreatePaymentResponseDto>(
@@ -135,6 +132,12 @@ class PaymentController(
         if (!JwtService.isJwtValid(authHeader))
             return null
 
-        return JwtService.extractUser(authHeader);
+        val userEntity = JwtService.extractUser(authHeader)
+
+        userEntity?.let {
+            return User(UUID.fromString(userEntity.id));
+        } ?: run {
+            return null
+        }
     }
 }
