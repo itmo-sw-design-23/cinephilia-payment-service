@@ -14,5 +14,10 @@ Content-Type: application/json
 
 ###
 
+GET localhost:8080/payments/api/v1/payments/019872e0-90cc-4374-929b-4dba4f30a5b3
+Accept: application/json
+
+###
+
 GET localhost:8080/payments/019872e0-90cc-4374-929b-4dba4f30a5b3
 Accept: application/json

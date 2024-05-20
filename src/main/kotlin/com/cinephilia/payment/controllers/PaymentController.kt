@@ -6,6 +6,7 @@ import com.cinephilia.payment.commands.proceedPaymentCommand
 import com.cinephilia.payment.commands.rejectPaymentCommand
 import com.cinephilia.payment.enitites.PaymentAggregate
 import com.cinephilia.payment.enitites.PaymentAggregateState
+import com.cinephilia.payment.metrics.PaymentsMetrics
 import com.cinephilia.payment.model.*
 import com.stripe.model.Event
 import com.stripe.model.PaymentIntent
@@ -20,7 +21,8 @@ import com.cinephilia.payment.model.PaymentAggregateState as PaymentAggregateSta
 
 @RestController
 class PaymentController(
-    val PaymentEsService: EventSourcingService<UUID, PaymentAggregate, PaymentAggregateState>
+    val PaymentEsService: EventSourcingService<UUID, PaymentAggregate, PaymentAggregateState>,
+    val metrics: PaymentsMetrics
 ) : PaymentApi {
 
     override fun cancelPayment(id: UUID): ResponseEntity<Unit> {
@@ -83,6 +85,7 @@ class PaymentController(
                         userId = currentState.user.id!!
                     )
                 }
+                metrics.incrementSuccess()
             }
 
             "payment_intent.payment_failed", "payment_intent.canceled" -> {
@@ -91,6 +94,7 @@ class PaymentController(
                 PaymentEsService.update(paymentID) {
                     it.cancelPaymentCommand(paymentId = paymentID)
                 }
+                metrics.incrementFail()
             }
         }
 

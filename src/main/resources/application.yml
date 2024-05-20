@@ -18,3 +18,20 @@ event:
     auto-scan-enabled: true
     scan-package: com.cinephilia.payment
     snapshot-frequency: 100
+
+management:
+  metrics:
+    tags:
+      application: payments
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
