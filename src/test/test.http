@@ -8,6 +8,7 @@ Content-Type: application/json
   },
   "movie": {
     "id": "246a7c1d-99ce-4054-9077-84b82ec86a68",
+    "name": "some name",
     "price": "555.0"
   }
 }

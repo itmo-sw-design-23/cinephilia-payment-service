@@ -84,6 +84,17 @@ services:
     networks:
       - external_network
 
+  jaeger-ui:
+    image: jaegertracing/all-in-one:${JAEGER_VERSION:-latest}
+    container_name: jaeger-ui
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - QUERY_BASE_PATH=/jaeger-ui
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+
 volumes:
   mongo_data: { }
   prom_data:
