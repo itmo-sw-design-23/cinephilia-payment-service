@@ -49,5 +49,3 @@ otel:
     exporter: none
   logs:
     exporter: none
-    otlp:
-      endpoint: http://localhost:4318
