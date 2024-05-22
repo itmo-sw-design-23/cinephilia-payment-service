@@ -1,14 +1,17 @@
 version: "3.9"
 services:
-#  backend:
-#    image: kawwik/payment-service
-#    ports:
-#      - 8080:80
-#    networks:
-#      - backend
-#    environment:
-#      SPRING__DATA__MONGODB__URI: mongodb://mongo:27017/
-#      SPRING__KAFKA__BOOTSTRAP-SERVERS: "kafka:29092"
+  backend:
+    image: kawwik/payment-service-test
+    ports:
+      - 8080:8080
+    networks:
+      - backend
+      - prometheus
+      - jaeger
+    environment:
+      SPRING__DATA__MONGODB__URI: mongodb://mongo:27017/payments
+      SPRING__KAFKA__BOOTSTRAP-SERVERS: "kafka:29092"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4318"
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -67,7 +70,7 @@ services:
     ports:
       - "9090:9090"
     networks:
-      - external_network
+      - prometheus
 
   grafana:
     image: grafana/grafana
@@ -82,7 +85,20 @@ services:
     depends_on:
       - prometheus
     networks:
-      - external_network
+      - prometheus
+
+  jaeger:
+    image: jaegertracing/all-in-one:${JAEGER_VERSION:-latest}
+    container_name: jaeger-ui
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - QUERY_BASE_PATH=/jaeger-ui
+    networks:
+      - jaeger
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
 
 volumes:
   mongo_data: { }
@@ -91,4 +107,5 @@ volumes:
 networks:
   kafka:
   backend:
-  external_network:
+  prometheus:
+  jaeger:
